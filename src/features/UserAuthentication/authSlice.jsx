@@ -18,7 +18,12 @@ export const login = createAsyncThunk(
 
 export const logout = createAsyncThunk(
     'session/logout',
-
+    async() => {
+        const response = await csrfFetch("api/session", {
+            method: "DELETE",
+        })
+        return response.ok;
+    }
 )
 
 export const authSlice = createSlice({
@@ -26,5 +31,16 @@ export const authSlice = createSlice({
     initialState,
     reducers: {
 
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(login.fulfilled, (state, action) => {
+                state.user = action.payload;
+            })
+            .addCase(logout.fulfilled, (state) => {
+                state.user = null;
+            })
     }
 })
+
+export default authSlice.reducer;
