@@ -1,21 +1,11 @@
-//login, logout, restore session, sign up
+//login, logout, restore session
 import axios from 'axios';
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 const initialState = { user: null };
 
-// export const login = createAsyncThunk(
-//     'session/login',
-//     async({ credential, password }) => {
-// const response = await csrfFetch("api/session", {
-//             method: "POST",
-//             body: JSON.stringify({ credential, password }),
-//         })
-//         const data = await response.json();
-//         return data.user
-//     }
-// );
+
 export const login = createAsyncThunk(
     'session/login',
     async ({ credential, password }, { rejectWithValue }) => {
@@ -32,7 +22,6 @@ export const login = createAsyncThunk(
     }
 );
 
-
 export const logout = createAsyncThunk(
     'session/logout',
     async() => {
@@ -40,6 +29,14 @@ export const logout = createAsyncThunk(
         return response.ok;
     }
 );
+
+export const restoreSession = createAsyncThunk(
+    'session/restore',
+    async() => {
+        const response = await axios.get("api/session");
+        return response.data.user;
+    }
+)
 
 export const authSlice = createSlice({
     name: 'auth',
@@ -54,6 +51,9 @@ export const authSlice = createSlice({
             })
             .addCase(logout.fulfilled, (state) => {
                 state.user = null;
+            })
+            .addCase(restoreSession.fulfilled, (state, action) => {
+                state.user = action.payload;
             })
     }
 })

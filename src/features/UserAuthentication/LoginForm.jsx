@@ -15,20 +15,6 @@ const [errors, setErrors] = useState([]);
 
 if (user) return <Redirect to="/" />;
 
-// const handleSubmit = (e) => {
-//     e.preventDefault();
-//     setErrors([]);
-//     const resultAction = dispatch(authActions.login({ credential, password }))
-//     if (authActions.login.fulfilled.match(resultAction)) {
-//         console.log('hi', resultAction)
-//         return resultAction
-//     } else {
-//         if (resultAction.payload) {
-//             setErrors(resultAction.payload)
-//         }
-//     }
-//   }
-
 const handleSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
