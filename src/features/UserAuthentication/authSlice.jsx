@@ -2,7 +2,6 @@
 import axios from 'axios';
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-// import { csrfFetch } from '../../store/csrf';
 
 const initialState = { user: null };
 
@@ -20,28 +19,24 @@ const initialState = { user: null };
 export const login = createAsyncThunk(
     'session/login',
     async ({ credential, password }, { rejectWithValue }) => {
-        try {
-            const response = await axios.post("/api/session", { credential, password });
-            return response.data.user; // Adjust based on your API response structure
-        } catch (error) {
-            // Check if error response is available and has data
-            if (error.response && error.response.data) {
-                return rejectWithValue(error.response.data.errors || ['Login failed']);
-            } else {
-                return rejectWithValue(['An unexpected error occurred']);
-            }
+            try {
+                const response = await axios.post("/api/session", { credential, password });
+            return response.data.user;
+    } catch (err) {
+        if(err.response) {
+            return rejectWithValue(err.response.data.errors);
+        } else {
+            return rejectWithValue(['An unexpected error occurred'])
         }
     }
+    }
 );
-
 
 
 export const logout = createAsyncThunk(
     'session/logout',
     async() => {
-        const response = await csrfFetch("api/session", {
-            method: "DELETE",
-        })
+        const response = await axios.delete("api/session")
         return response.ok;
     }
 );
@@ -56,12 +51,6 @@ export const authSlice = createSlice({
         builder
             .addCase(login.fulfilled, (state, action) => {
                 state.user = action.payload;
-            })
-            .addCase(login.rejected, (state, action) => {
-                // Handle rejected case
-                console.log('hello')
-                state.user = null;
-                state.error = action.error; // Store the error
             })
             .addCase(logout.fulfilled, (state) => {
                 state.user = null;

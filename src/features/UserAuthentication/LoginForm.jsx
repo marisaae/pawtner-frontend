@@ -18,28 +18,30 @@ if (user) return <Redirect to="/" />;
 // const handleSubmit = (e) => {
 //     e.preventDefault();
 //     setErrors([]);
-//     return dispatch(sessionActions.login({ credential, password }))
-//       .catch(async (res) => {
-//         const data = await res.json();
-//         if (data && data.errors) setErrors(data.errors);
-//       });
+//     const resultAction = dispatch(authActions.login({ credential, password }))
+//     if (authActions.login.fulfilled.match(resultAction)) {
+//         console.log('hi', resultAction)
+//         return resultAction
+//     } else {
+//         if (resultAction.payload) {
+//             setErrors(resultAction.payload)
+//         }
+//     }
 //   }
+
 const handleSubmit = (e) => {
     e.preventDefault();
     setErrors([]);
-
     dispatch(authActions.login({ credential, password }))
-        .then((actionResult) => {
-            if (authActions.login.rejected.match(actionResult)) {
-                // Assuming the error payload is an array of error messages
-                setErrors(actionResult.payload || ["An unexpected error occurred."]);
-            }
-        })
-        .catch(() => {
-            // Handle any additional errors not related to the API response
-            setErrors(["An unexpected error occurred."]);
-        });
-};
+      .then((actionResult) => {
+        if (authActions.login.rejected.match(actionResult)) {
+          setErrors(actionResult.payload);
+        }
+      })
+      .catch(() => {
+        setErrors(["An unexpected error occurred."]);
+      });
+  }
 
   return (
     <form onSubmit={handleSubmit}>
