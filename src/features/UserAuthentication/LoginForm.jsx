@@ -2,40 +2,33 @@ import React, { useState } from 'react';
 
 import * as authActions from './authSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUser } from './authSlice';
+import { getAuthenticatedUser, getAuthErrors } from './authSlice';
 import { Redirect } from 'react-router-dom';
 
 const LoginForm = () => {
 const dispatch = useDispatch();
-const user = useSelector(getUser);
+const user = useSelector(getAuthenticatedUser);
+const authErrors = useSelector(getAuthErrors);
 
 const [credential, setCredential] = useState('');
 const [password, setPassword] = useState('');
-const [errors, setErrors] = useState([]);
 
 if (user) return <Redirect to="/" />;
 
 const handleSubmit = (e) => {
     e.preventDefault();
-    setErrors([]);
     dispatch(authActions.login({ credential, password }))
-      .then((actionResult) => {
-        if (authActions.login.rejected.match(actionResult)) {
-          setErrors(actionResult.payload);
-        }
-      })
-      .catch(() => {
-        setErrors(["An unexpected error occurred."]);
-      });
+      
   }
 
   return (
     <form onSubmit={handleSubmit}>
-        <ul>
-        {errors.map((error, idx) => (
+        {authErrors && (<ul>
+        {authErrors.map((error, idx) => (
           <li key={idx}>{error}</li>
         ))}
       </ul>
+        )}
         <label>
             Username or Email
             <input 
