@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 
-import * as authActions from './authSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAuthenticatedUser, getAuthErrors } from './authSlice';
+import { login, getAuthenticatedUser, getAuthErrors } from './authSlice';
 import { Redirect } from 'react-router-dom';
 
 const LoginForm = () => {
@@ -17,7 +16,7 @@ if (user) return <Redirect to="/" />;
 
 const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(authActions.login({ credential, password }))
+    dispatch(login({ credential, password }))
       
   }
 

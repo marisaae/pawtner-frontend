@@ -5,7 +5,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
   user: null,
-  authError: null,
+  authError: [],
 };
 
 export const login = createAsyncThunk(
@@ -45,7 +45,7 @@ export const authSlice = createSlice({
     builder
       .addCase(login.fulfilled, (state, action) => {
         state.user = action.payload;
-        state.authError = null;
+        state.authError = [];
       })
       .addCase(login.rejected, (state, action) => {
         state.authError = action.payload;
@@ -58,7 +58,7 @@ export const authSlice = createSlice({
       })
       .addCase(restoreSession.fulfilled, (state, action) => {
         state.user = action.payload;
-        state.authError = null;
+        state.authError = [];
       })
       .addCase(restoreSession.rejected, (state, action) => {
         state.authError = action.payload;

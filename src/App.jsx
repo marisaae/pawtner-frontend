@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import { restoreSession } from "./features/UserAuthentication/authSlice";
 import LoginForm from "./features/UserAuthentication/LoginForm";
+import SignupForm from "./features/UserProfiles/SignupForm";
 
 function App() {
   const dispatch = useDispatch();
@@ -16,6 +17,9 @@ function App() {
     <Switch>
       <Route path="/login">
         <LoginForm />
+      </Route>
+      <Route path="/signup">
+        <SignupForm />
       </Route>
     </Switch>
   );
