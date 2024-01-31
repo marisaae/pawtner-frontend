@@ -40,11 +40,20 @@ export const restoreSession = createAsyncThunk("session/restore", async () => {
 export const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    updateAuthState: (state, action) => {
+      state.user = action.payload;
+      state.authError = [];
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(login.fulfilled, (state, action) => {
-        state.user = action.payload;
+        state.user = {
+          id: action.payload.id,
+          username: action.payload.username,
+          email: action.payload.email
+        }
         state.authError = [];
       })
       .addCase(login.rejected, (state, action) => {
@@ -68,5 +77,7 @@ export const authSlice = createSlice({
 
 export const getAuthenticatedUser = (state) => state.auth.user;
 export const getAuthErrors = (state) => state.auth.authError;
+
+export const { updateAuthState } = authSlice.actions;
 
 export default authSlice.reducer;
