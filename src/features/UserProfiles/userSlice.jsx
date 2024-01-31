@@ -84,6 +84,21 @@ export const updateUserProfile = createAsyncThunk(
 export const userSlice = createSlice({
   name: "user",
   initialState,
+  reducers: {
+    resetUser: (state) => {
+      state.user.profile = null;
+      state.user.petPreferences = null;
+      state.user.savedPets = null;
+      state.signupStatus = {
+        error: [],
+        success: false,
+      };
+      state.updateUserProfileStatus = {
+        error: [],
+        success: false,
+      };
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(signup.fulfilled, (state, action) => {
@@ -113,5 +128,7 @@ export const userSlice = createSlice({
 
 export const getSignupStatus = (state) => state.user.signupStatus;
 export const getUserProfileState = (state) => state.user.profile;
+
+export const { resetUser } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { signup, getSignupStatus } from "./userSlice";
-import { updateAuthState } from "../UserAuthentication/authSlice";
+import { updateAuthState, resetAuthState } from "../UserAuthentication/authSlice";
+import { getAuthenticatedUser } from "../UserAuthentication/authSlice";
+import { resetUser } from "./userSlice";
 
 import { Redirect } from "react-router-dom";
 
@@ -9,6 +11,7 @@ const SignupForm = () => {
   const dispatch = useDispatch();
 
   const signUpStatus = useSelector(getSignupStatus);
+  const authenticatedUser = useSelector(getAuthenticatedUser)
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -17,6 +20,13 @@ const SignupForm = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordError, setPasswordError] = useState("");
+
+  useEffect(() => {
+    if (authenticatedUser) {
+      dispatch(resetAuthState);
+      dispatch(resetUser)
+    }
+  }, [dispatch, authenticatedUser])
 
   const handleSubmit = (e) => {
     e.preventDefault();
