@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { login, getAuthenticatedUser, getAuthErrors } from './authSlice';
+import { updateUserState } from '../UserProfiles/userSlice';
 import { Redirect } from 'react-router-dom';
 
 const LoginForm = () => {
@@ -17,7 +18,14 @@ if (user) return <Redirect to="/" />;
 const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(login({ credential, password }))
-      
+    .unwrap()
+    .then((signedInUser) => {
+      dispatch(updateUserState({
+        firstName: signedInUser.firstName,
+        lastName: signedInUser.lastName,
+        bio: signedInUser.bio
+      }))
+    })
   }
 
   return (

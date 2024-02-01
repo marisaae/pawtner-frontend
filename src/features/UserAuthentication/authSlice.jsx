@@ -34,7 +34,11 @@ export const logout = createAsyncThunk("session/logout", async () => {
 
 export const restoreSession = createAsyncThunk("session/restore", async () => {
   const response = await axios.get("api/session");
-  return response.data.user;
+  return {
+    id: response.data.user.id,
+    username: response.data.user.username,
+    email: response.data.user.email
+  }
 });
 
 export const authSlice = createSlice({
@@ -70,7 +74,7 @@ export const authSlice = createSlice({
         state.authError = action.payload;
       })
       .addCase(restoreSession.fulfilled, (state, action) => {
-        state.user = action.payload;
+        state.user = action.payload
         state.authError = [];
       })
       .addCase(restoreSession.rejected, (state, action) => {

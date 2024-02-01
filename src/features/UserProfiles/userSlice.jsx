@@ -50,7 +50,11 @@ export const getUserProfile = createAsyncThunk(
   async(id, { rejectWithValue }) => {
     try {
       const response = await axios.get(`api/users/${id}`);
-      return response.data;
+      return {
+        firstName: response.data.firstName,
+    lastName: response.data.lastName,
+    bio: response.data.bio
+      }
     } catch (err) {
       if (err.response) {
         return rejectWithValue(err.response.data.errors);
@@ -97,6 +101,13 @@ export const userSlice = createSlice({
         error: [],
         success: false,
       };
+    },
+    updateUserState: (state, action) => {
+      state.user.profile = {
+        firstName: action.payload.firstName,
+        lastName: action.payload.lastName,
+        bio: action.payload.bio
+      }
     }
   },
   extraReducers: (builder) => {
@@ -127,8 +138,8 @@ export const userSlice = createSlice({
 });
 
 export const getSignupStatus = (state) => state.user.signupStatus;
-export const getUserProfileState = (state) => state.user.profile;
+export const getUserProfileState = (state) => state.user.user.profile;
 
-export const { resetUser } = userSlice.actions;
+export const { resetUser, updateUserState } = userSlice.actions;
 
 export default userSlice.reducer;

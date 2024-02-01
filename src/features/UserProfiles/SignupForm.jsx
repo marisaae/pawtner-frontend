@@ -23,8 +23,8 @@ const SignupForm = () => {
 
   useEffect(() => {
     if (authenticatedUser) {
-      dispatch(resetAuthState);
-      dispatch(resetUser)
+      dispatch(resetAuthState());
+      dispatch(resetUser())
     }
   }, [dispatch, authenticatedUser])
 
